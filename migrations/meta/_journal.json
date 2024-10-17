@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1729028672012,
+      "tag": "0000_fixed_wiccan",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1729042680188,
+      "tag": "0001_sweet_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1729042959955,
+      "tag": "0002_lush_wendell_vaughn",
+      "breakpoints": true
+    }
+  ]
+}
