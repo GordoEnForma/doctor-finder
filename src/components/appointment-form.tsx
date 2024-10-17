@@ -17,6 +17,7 @@ import { Doctor } from '@/app/(protected)/clinicas/types'
 import { Schedule } from '@/app/(protected)/agendar/page'
 import { scheduleAppointmentAction } from '@/app/(protected)/agendar/actions'
 import { useRouter } from 'next/navigation'
+import { useAction } from 'next-safe-action/hooks'
 
 interface AppointmentSchedulerProps {
   userId: string;
@@ -28,6 +29,7 @@ interface AppointmentSchedulerProps {
 
 export const AppointmentScheduler = ({ appointmentInfo, userId }: AppointmentSchedulerProps) => {
   const [isPending, startTransition] = useTransition();
+  const { executeAsync, isExecuting } = useAction(scheduleAppointmentAction)
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
   const [selectedHorario, setSelectedHorario] = useState<string | undefined>(undefined)
@@ -84,17 +86,18 @@ export const AppointmentScheduler = ({ appointmentInfo, userId }: AppointmentSch
     };
 
     try {
-      const result = await scheduleAppointmentAction(appointmentData);
-      if (result.success) {
-        console.log("Cita agendada con éxito:");
-        startTransition(() => {
-          router.push('/mis-citas');
-        });
-      } else if ('error' in result) {
-        console.error("Error al agendar la cita:", result.error);
-      } else {
-        console.error("Error desconocido al agendar la cita");
-      }
+      const result = await executeAsync(appointmentData);
+      console.log(result?.data);
+      if (result?.data)
+        if ('success' in result.data) {
+          startTransition(() => {
+            router.push('/mis-citas');
+          });
+        } else if ('error' in result.data) {
+          console.error("Error al agendar la cita:");
+        } else {
+          console.error("Error desconocido al agendar la cita");
+        }
     } catch (error) {
       console.error("Error inesperado al agendar la cita:", error);
     }
@@ -140,7 +143,7 @@ export const AppointmentScheduler = ({ appointmentInfo, userId }: AppointmentSch
                 onValueChange={handleHorarioSelect}
                 value={selectedHorario}
               >
-                <SelectTrigger  className="w-full border-2 border-black/30">
+                <SelectTrigger className="w-full border-2 border-black/30">
                   <SelectValue placeholder="Seleccionar horario" />
                 </SelectTrigger>
                 <SelectContent >
@@ -164,8 +167,9 @@ export const AppointmentScheduler = ({ appointmentInfo, userId }: AppointmentSch
             </div>
           </CardContent>
         </Card>
-        <Button disabled={isPending} type="submit" className='w-full'>Confirmar Cita</Button>
+        <Button disabled={!selectedDate ||
+          !selectedHorario || isPending || isExecuting} type="submit" className='w-full'>Confirmar Cita</Button>
       </form>
-    </div>
+    </div >
   )
 }

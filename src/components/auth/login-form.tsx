@@ -9,6 +9,7 @@ import { LogInIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { login } from "@/app/(public)/auth/actions";
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 const LoginFormSchema = z.object({
   email: z.string().email({
     message: "El correo electronico es invalido",
@@ -20,6 +21,7 @@ const LoginFormSchema = z.object({
 type LoginFormProps = z.infer<typeof LoginFormSchema>
 export const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter()
   const { toast } = useToast()
   const form = useForm<LoginFormProps>({
     resolver: zodResolver(LoginFormSchema),
@@ -47,6 +49,9 @@ export const LoginForm = () => {
                     description: response.error,
                     duration: 6000
                   })
+                }
+                else {
+                  router.push("/inicio")
                 }
               }
             )
