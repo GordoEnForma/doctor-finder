@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge, CalendarIcon, ClockIcon, BuildingIcon } from "lucide-react"
+import { CalendarIcon, ClockIcon, BuildingIcon } from "lucide-react"
 import type { Appointment } from "@/app/(protected)/mis-citas/page"
+import { Badge } from "@/components/ui/badge"
 
 const statusColors = {
   PENDIENTE: "bg-yellow-100 text-yellow-800 hover:bg-yellow-200",
@@ -28,15 +29,15 @@ export const MisCitasCard = ({ appointment }: MisCitasCardProps) => {
         </Badge>
         <p className="text-sm text-gray-600">{appointment.especialidadName}</p>
         <div className="flex items-center text-sm text-gray-600">
-          <CalendarIcon className="h-4 w-4 mr-2" />
+          <CalendarIcon className="size-4 mr-2" />
           {appointment.fecha}
         </div>
         <div className="flex items-center text-sm text-gray-600">
-          <ClockIcon className="h-4 w-4 mr-2" />
+          <ClockIcon className="size-4 mr-2" />
           {appointment.horaInicio} - {appointment.horaFin}
         </div>
         <div className="flex items-center text-sm text-gray-600">
-          <BuildingIcon className="h-4 w-4 mr-2" />
+          <BuildingIcon className="size-4 mr-2" />
           <span className="" title={appointment.clinicaName}>
             {appointment.clinicaName}
           </span>
